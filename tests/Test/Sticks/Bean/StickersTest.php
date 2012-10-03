@@ -11,7 +11,8 @@ class StickersTest extends Main{
     
     public function setUp() {
         parent::setUp();
-        /** @var $this->object Sticks\Beans\Stickers */
+        
+        /** @var Sticks\Beans\Stickers $this->object  */
         $this->object = new Stickers($this->em);
         
     }
@@ -23,30 +24,21 @@ class StickersTest extends Main{
      * @xxxxdataProvider providerCreateStick
      */
     function testCreateStick(){
-       $id =  $this->object->create(array('title'=>'Vasya'));
+       $id =  $this->object->create(array('title'=>'Joke!!','userId'=>123546));
        $this->assertTrue($id > 0);
        return $id;
        
     }
-    function providerCreateSticker(){
-        return array(
-            array(
-                array('title'=>'Vasya')
-                ),
-            array(
-                array('title'=>'Petya')
-                ),
-             array(
-                array('title'=>'Nika')
-                )
-        );
-    }
+  
     
     /**
      * @depends testCreateStick
      */
     function testUpdateSticker($id){
        $obj = $this->object->update($id,array('title'=>'IAM NEW VASYA'));
+       
+       
+       
        $this->assertTrue(true == $obj instanceof \Sticks\Model\Stick);
        $this->assertEquals('IAM NEW VASYA', $obj->getTitle());
        return $obj->getId();
@@ -67,6 +59,18 @@ class StickersTest extends Main{
     function testUnlikeSticker($id){
         $rate = $this->object->unlike($id);
         $this->assertEquals(0, $rate);
+    }
+    
+    
+    /**
+     *  @depends testCreateStick
+     */
+    function testGetByUser($id) {
+        $obj = $this->object->getIfExist($id);
+        $data = $this->object->getByUser($obj->getUserId());
+        $this->assertTrue(is_array($data));
+        $this->assertTrue(count($data) > 0);
+        $this->assertTrue(is_object($data[0]));
     }
     
     

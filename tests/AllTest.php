@@ -15,5 +15,5 @@ class AllTest {
         return $suite;
     }
 }
-AllTEst::main();
+AllTest::main();
 ?>

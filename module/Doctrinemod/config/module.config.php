@@ -8,7 +8,7 @@ return array(
          'dbname' => 'vasabi',
          'user' => 'r2',
          'password' => 'domodomo1',
-         'host' => '192.168.25.73',
+         'host' => '192.168.1.145',
          'driver' => 'pdo_mysql'
          ),
          'options'=>array(

@@ -13,8 +13,8 @@ $serviceManager->setService('ApplicationConfig', $configuration);
 $serviceManager->get('ModuleManager')->loadModules();
 $serviceManager->get('Application')->bootstrap();
 
-$loader->add("PHPUnit_", __DIR__.'/../vendor');
+
 $loader->add("Test\\", __DIR__);
-set_include_path(get_include_path().":/home/admin/repo/j2ee/zf2/ZendSkeletonApplication/tests/../vendor/");
+
 
 Test\Loader::$sm = $serviceManager;

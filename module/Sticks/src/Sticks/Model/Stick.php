@@ -16,10 +16,17 @@ class Stick {
  /** @Column(length=100)*/
  private $title;
  
-/** @Column(type="integer", nullable=true) */
- private $imgId;
 
- /** @Column(type="datetime",nullable=true)*/
+/**
+ *
+ * @OneToOne(targetEntity="\Sticks\Model\Image",inversedBy="id",orphanRemoval=true)
+ * 
+ */
+ private $image;
+
+ 
+ 
+ /** @Column(type="datetime",nullable=false)*/
  private $createDate;
 
  /** @Column(type="datetime",nullable=true)*/
@@ -27,43 +34,51 @@ class Stick {
  
  /** @Column(type="integer", nullable=false) */
  private $rate = 0;
+ 
+ /** @Column(type="integer",nullable=false) */
+ private $userId;
 
- public function getId(){
+ 
+ public function __construct() {
+     
+ }
+ public function getId() {
      return $this->id;
  }
 
- public function getTitle(){
+ public function getImage() {
+     return $this->image;
+ }
+
+ public function setImage(\Sticks\Model\Image $image) {
+     $this->image = $image;
+ }
+
+  public function getTitle() {
      return $this->title;
  }
 
- public function setTitle($title){
+ public function setTitle($title) {
      $this->title = $title;
  }
 
- public function getImgId(){
-     return $this->img_id;
+
+
+ public function getCreateDate() {
+     return $this->createDate;
  }
 
- public function setImgId($img_id){
-     $this->img_id = $img_id;
+ public function setCreateDate($createDate) {
+     $this->createDate = $createDate;
  }
 
- public function getCreateDate(){
-     return $this->create_date;
- }
-
- public function setCreateDate($create_date){
-     $this->create_date = $create_date;
- }
-
- public function getModify(){
+ public function getModify() {
      return $this->modify;
  }
 
- public function setModify($modify){
+ public function setModify($modify) {
      $this->modify = $modify;
  }
-
 
  public function getRate() {
      return $this->rate;
@@ -72,6 +87,15 @@ class Stick {
  public function setRate($rate) {
      $this->rate = $rate;
  }
+
+ public function getUserId() {
+     return $this->userId;
+ }
+
+ public function setUserId($userId) {
+     $this->userId = $userId;
+ }
+
 
 
 

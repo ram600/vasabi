@@ -9,7 +9,6 @@ use Sticks\Exceptions;
 use Zend\Form\Form;
 use Custom\Bind\Binder;
 
-
 class Stickers extends Bean {
 
     protected $_stickClass = 'Sticks\Model\Stick';
@@ -25,60 +24,13 @@ class Stickers extends Bean {
     
     public function create(array $data){
 
-             if($this->haveImage()){
-                 $this->loadImage();
-             }
-        
-        
-             //$load = new Zend\File\Transfer\Adapter\Http();
-             $im = new \Sticks\Model\Image();
-             $im->setName("ololo");
-             $im->setType("1111");
-       
-             $this->_em->persist($im);
-             $this->_em->flush();
-             
-             $group = $this->_em->find('\Sticks\Model\Image', 1);
-             
-             
-             
-             
-             
-             $data['createDate'] = new \DateTime($this->getDate()); 
-             
+             $data['createDate'] = new \DateTime($this->getDate());  
              $ent = Binder::bind($data, new Stick());
-             $ent->setImage($group);
-             
              $this->_em->persist($ent);
              $this->_em->flush();
              return $ent->getId();
          
     }
-    
-    
-    
-    public function haveImage(){
-        
-        
-    }
-    
-    public function loadImage(){
-        
-        $loader = new \Zend\File\Transfer\Adapter\Http();
-        $loader->setDestination("/tmp/img/");
-        if($loader->receive(array('sticker_image'))){
-            
-        }else{
-            
-        }
-        
-        
-    }
-    
-    
-    
-    
-    
     public function delete($id){
         
           $row = $this->getIfExist($id);
