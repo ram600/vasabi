@@ -10,48 +10,46 @@
 return array(
     'router' => array(
         'routes' => array(
-            'home' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route'    => '/',
-                    'defaults' => array(
-                        'controller' => 'Sticks\Controller\Index',
-                        'action'     => 'index',
-                    ),
-                ),
-            ),
-            // The following is a route to simplify getting started creating
-            // new controllers and actions without needing to create a new
-            // module. Simply drop new controllers in, and you can access them
-            // using the path /application/:controller/:action
-            'application' => array(
-                'type'    => 'Literal',
-                'options' => array(
-                    'route'    => '/sticks',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'Sticks\Controller',
-                        'controller'    => 'Index',
-                        'action'        => 'index',
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-                    'default' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/[:controller[/:action]]',
-                            'constraints' => array(
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
-                            ),
-                        ),
-                    ),
-                ),
-            ),
+            
+             'home'=>array(
+                  'type'=>'Literal',
+                  'options'=>array(
+                      'route'=>'/',
+                      'defaults'=>array(
+                          'controller'=>'Index',
+                          '__NAMESPACE__'=>'Sticks\Controller',
+                          'action'=>'index'
+                      )
+                  )
+              ),
+              
+              'default'=>array(
+                  'type'=>'Segment',
+                   'options'=>array(
+                       'route'=>'/:controller',
+                       'constraints'=>array(
+                          'controller'=>'[a-zA-Z]+',
+                          'action'    =>'[a-zA-Z]+',
+                       ),
+                       'defaults'=>array(
+                           '__NAMESPACE__'=>'Sticks\Controller',
+                           'action'=>'index'
+                       )
+                     ),
+                     'may_terminate'=>true,
+                     'child_routes'=>array(
+                        'query'=>array(
+                            'type'=>'Query',
+                            
+                        )
+                     )
+               
+                  
+               ) 
+
         ),
     ),
+    
     'service_manager' => array(
         'factories' => array(
             'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
@@ -69,7 +67,8 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Sticks\Controller\Index' => 'Sticks\Controller\IndexController'
+            'Sticks\Controller\Index' => 'Sticks\Controller\Index',
+            'Sticks\Controller\Stick'=>'Sticks\Controller\Stick',
         ),
     ),
     'view_manager' => array(

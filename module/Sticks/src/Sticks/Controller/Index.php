@@ -12,12 +12,15 @@ namespace Sticks\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class IndexController extends AbstractActionController
+
+class Index extends AbstractActionController
 {
     public function indexAction()
     {  
-     
-       
-        return array('form'=>new \Sticks\Form\Sticker());
+        
+        
+     echo 1;exit;
+      
+      
     }
 }

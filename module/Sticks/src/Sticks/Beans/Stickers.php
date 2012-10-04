@@ -25,29 +25,16 @@ class Stickers extends Bean {
     
     public function create(array $data){
 
-             if($this->haveImage()){
-                 $this->loadImage();
-             }
-        
-        
-             //$load = new Zend\File\Transfer\Adapter\Http();
-             $im = new \Sticks\Model\Image();
-             $im->setName("ololo");
-             $im->setType("1111");
        
-             $this->_em->persist($im);
-             $this->_em->flush();
-             
-             $group = $this->_em->find('\Sticks\Model\Image', 1);
-             
-             
-             
-             
-             
              $data['createDate'] = new \DateTime($this->getDate()); 
              
              $ent = Binder::bind($data, new Stick());
-             $ent->setImage($group);
+             
+             if($data['img_form_name']){
+                 $img = $this->loadIMage($data['img_form_name']);
+                 $ent->setImage($group);
+             }
+             
              
              $this->_em->persist($ent);
              $this->_em->flush();
@@ -57,21 +44,27 @@ class Stickers extends Bean {
     
     
     
-    public function haveImage(){
-        
-        
-    }
+
     
-    public function loadImage(){
+    public function loadImage($img_form_name){
+        
+        $img = new \Sticks\Model\Image();
         
         $loader = new \Zend\File\Transfer\Adapter\Http();
-        $loader->setDestination("/tmp/img/");
-        if($loader->receive(array('sticker_image'))){
-            
-        }else{
-            
-        }
+        $loader->setDestination("/tmp/ooo");
+        $info = $loader->getFileInfo($img_form_name);
         
+        \Custom\Bind\Binder::bind($info, $img);
+        
+        $this->_em->persist($img);
+        $this->_em->flush();
+        
+        $loader->addFilter(new \Zend\Filter\File\Rename(array('target'=>$img->getId())),null,$img_form_name);
+  
+        if($loader->receive(array('sticker_image'))){
+            return $img;
+        }
+            return null;
         
     }
     

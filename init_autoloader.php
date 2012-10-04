@@ -23,6 +23,7 @@ if (file_exists(__DIR__.'/vendor/autoload.php')) {
     $loader = include 'vendor/autoload.php';
     //add path to lib
     $loader->add("Custom\\",__DIR__.'/vendor/');
+ 
 }
 
 $zf2Path = false;
