@@ -1,32 +1,46 @@
 <?php
 namespace Sticks\Form;
-use Zend\Form\Element;
-class Sticker extends \Zend\Form\Form {
-    
-    public function __construct($name = null){
+
+use Zend\Form\Form;
+
+
+class Sticker extends Form
+{
+    public function __construct($name = 'Sticker')
+    {
         parent::__construct($name);
-        
-        $this->add(new Element\Text('title',
-                array('label'=>'Title','required'=>true,
-                 'validators'=>  array(new \Zend\Validator\EmailAddress())
-            )));
-        $this->add(new Element\Textarea('text',array('label'=>'Title','required'=>true)));
-        
-       // $this->add(new Element\Submit('stick',array('value'=>'Stick')));
+        $this->setAttribute('method', 'post');
+        $this->setAttribute('enctype','multipart/form-data');
         
         $this->add(array(
-            'name' => 'stick',
+            'name' => 'title',
             'attributes' => array(
-                'type' => 'submit',
-                'value'=>'Stick'
+                'type'  => 'text',
+            ),
+            'options' => array(
+                'label' => 'Title'
+                
             )
         ));
+
+        
+        $this->add(array(
+            'name' => 'image',
+            'attributes' => array(
+                'type'  => 'file',
+            ),
+            'options' => array(
+                'label' => 'Image Upload',
+            ),
+        )); 
         
         
-        $this->setAttribute('method', 'POST');
-        $this->setAttribute('action', 'stickers/create');
-        
+        $this->add(array(
+            'name' => 'submit',
+            'attributes' => array(
+                'type'  => 'submit',
+                'value' => 'Stick!'
+            ),
+        )); 
     }
-    
 }
-?>

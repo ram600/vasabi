@@ -50,7 +50,7 @@ class Stick {
      return $this->image;
  }
 
- public function setImage(\Sticks\Model\Image $image) {
+ public function setImage(\Sticks\Model\Image $image = null) {
      $this->image = $image;
  }
 

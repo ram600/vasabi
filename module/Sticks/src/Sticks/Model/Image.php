@@ -39,6 +39,10 @@ class Image{
     private $createDate;
     
     
+    public function __construct() {
+        $this->createDate = new \DateTime(date("Y-m-d H:i:s"));
+    }
+    
     public function getId() {
         return $this->id;
     }

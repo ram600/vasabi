@@ -8,13 +8,16 @@ use Sticks\Beans\Bean;
 use Sticks\Exceptions;
 use Zend\Form\Form;
 use Custom\Bind\Binder;
-
+use Zend\InputFilter\InputFilterAwareInterface;
 
 class Stickers extends Bean {
 
     protected $_stickClass = 'Sticks\Model\Stick';
     protected $_form;
     protected $max_count = 10;
+    
+    static protected $_inputFilter;
+    
     
     public function __construct(\Doctrine\ORM\EntityManager $em){
         parent::__construct($em);
@@ -25,17 +28,10 @@ class Stickers extends Bean {
     
     public function create(array $data){
 
-       
+     
              $data['createDate'] = new \DateTime($this->getDate()); 
-             
+             $data['userId']=111;
              $ent = Binder::bind($data, new Stick());
-             
-             if($data['img_form_name']){
-                 $img = $this->loadIMage($data['img_form_name']);
-                 $ent->setImage($group);
-             }
-             
-             
              $this->_em->persist($ent);
              $this->_em->flush();
              return $ent->getId();
@@ -48,23 +44,9 @@ class Stickers extends Bean {
     
     public function loadImage($img_form_name){
         
-        $img = new \Sticks\Model\Image();
+       
         
-        $loader = new \Zend\File\Transfer\Adapter\Http();
-        $loader->setDestination("/tmp/ooo");
-        $info = $loader->getFileInfo($img_form_name);
-        
-        \Custom\Bind\Binder::bind($info, $img);
-        
-        $this->_em->persist($img);
-        $this->_em->flush();
-        
-        $loader->addFilter(new \Zend\Filter\File\Rename(array('target'=>$img->getId())),null,$img_form_name);
-  
-        if($loader->receive(array('sticker_image'))){
-            return $img;
-        }
-            return null;
+           echo $loader->getMessages();exit;
         
     }
     
@@ -126,7 +108,45 @@ class Stickers extends Bean {
         }
         throw new Exceptions\StickerNotExist;
     }
+
+    
+    
+    
+    public  static function getInputFilter() {
+        //if(!$this->inputFilter){
+            $inputFilter = new \Zend\InputFilter\InputFilter();
+            $factory     = new \Zend\InputFilter\Factory();
+            
+            $inputFilter->add($factory->createInput(array(
+                'name'=>'title',
+                'required'=>true,
+                'filters'=>array(
+                    array('name'=>'StripTags'),
+                    array('name'=>'StringTrim')
+                ),
+                'validators'=>array(
+                    array(
+                    'name'=>'StringLength',
+                    'options'=>array(
+                        'encoding'=>'UTF-8',
+                        'min'=>5,
+                        'max'=>100
+                    )
+                    )
+                )
+            )));
+            
+            
+            return $inputFilter;
+        //}
+    }
+
+    public function setInputFilter(\Zend\InputFilter\InputFilterInterface $inputFilter) {
+         throw new \Exception("Not used");
+
+    }
    
+
     
    
 

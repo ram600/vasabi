@@ -1,0 +1,16 @@
+<?php
+// filename : module/Test/view/test/profile/add.phtml
+
+$form->setAttribute('action',
+                    $this->url('stick', //your route name ...
+                               array('controller'=>'stick', 'action' => 'add'))); 
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formRow($form->get('title'));
+
+echo $this->formRow($form->get('image'));
+
+echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag();
+?>

@@ -16,23 +16,22 @@ return array(
                   'options'=>array(
                       'route'=>'/',
                       'defaults'=>array(
-                          'controller'=>'Index',
-                          '__NAMESPACE__'=>'Sticks\Controller',
+                          'controller'=>'index',
                           'action'=>'index'
                       )
                   )
               ),
               
-              'default'=>array(
+              'stick'=>array(
                   'type'=>'Segment',
                    'options'=>array(
-                       'route'=>'/:controller',
+                       'route'=>'/:controller[/:action]',
                        'constraints'=>array(
                           'controller'=>'[a-zA-Z]+',
                           'action'    =>'[a-zA-Z]+',
                        ),
                        'defaults'=>array(
-                           '__NAMESPACE__'=>'Sticks\Controller',
+                           //'__NAMESPACE__'=>'Sticks\Controller',
                            'action'=>'index'
                        )
                      ),
@@ -40,8 +39,7 @@ return array(
                      'child_routes'=>array(
                         'query'=>array(
                             'type'=>'Query',
-                            
-                        )
+                         )
                      )
                
                   
@@ -66,9 +64,11 @@ return array(
         ),
     ),
     'controllers' => array(
+        
         'invokables' => array(
-            'Sticks\Controller\Index' => 'Sticks\Controller\Index',
-            'Sticks\Controller\Stick'=>'Sticks\Controller\Stick',
+            'index' => 'Sticks\Controller\Index',
+            'stick' =>'Sticks\Controller\Stick',
+            
         ),
     ),
     'view_manager' => array(
