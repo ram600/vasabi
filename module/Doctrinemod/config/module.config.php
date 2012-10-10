@@ -16,9 +16,9 @@ return array(
                  '../Sticks/src/Sticks/Model'
                  ),
              'cache'=> '\Doctrine\Common\Cache\ArrayCache',
-             'path_to_proxy'=>'/proxy',
+             'path_to_proxy'=>__DIR__.'/../proxy',
              'proxy_namespace'=>'Sticks\Proxies',
-             'autogenerate_proxy' => false
+             'autogenerate_proxy' => true
          )
     
 

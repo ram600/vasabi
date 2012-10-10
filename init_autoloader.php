@@ -19,6 +19,10 @@
   \ini_set("error_reporting",E_ALL);
 // Composer autoloading
         
+
+  
+define("APPLICATION_PATH", __DIR__);
+  
 if (file_exists(__DIR__.'/vendor/autoload.php')) {
     $loader = include 'vendor/autoload.php';
     //add path to lib

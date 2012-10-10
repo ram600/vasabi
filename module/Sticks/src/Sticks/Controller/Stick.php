@@ -15,45 +15,53 @@ use Zend\View\Model\ViewModel;
 
 class Stick extends AbstractActionController
 {
-    public function indexAction()
-    {  
-     echo 2;
-    }
+  
+
+    
+    
+    
     public function addAction(){
        
         $form = new \Sticks\Form\Sticker();
-        $form->setData($this->request->getPost());
+        $data = $this->request->getPost();
+        $file = $this->getRequest()->getFiles('image');
+        $data['image'] = $file['name'];
+        $form->setData($data);
         $form->setInputFilter(\Sticks\Beans\Stickers::getInputFilter());
         
         if($form->isValid()){
            
-             $em =    $this->getServiceLocator()->get('em');
-             $stick_bean = new \Sticks\Beans\Stickers($em);
-             $data = $form->getData();
-            
-             
-                $img = new \Sticks\Model\Image();
-                $loader = new \Zend\File\Transfer\Adapter\Http();
+                $em =    $this->getServiceLocator()->get('em');
+                $stick_bean = new \Sticks\Beans\Stickers($em);
+                $data = $form->getData();
+               
                 
-                $loader->setDestination("/tmp/ooo");
+                $loader = new \Zend\File\Transfer\Adapter\Http();
+             
+                $loader->setDestination(APPLICATION_PATH.'/public/source/sticks/');
+                
                 $info = $loader->getFileInfo('image');
                 
-                \Custom\Bind\Binder::bind($info['image'], $img);
-                print_r($info);
+                $img  =  \Custom\Bind\Binder::bind($info['image'], new \Sticks\Model\Image());
                 $em->persist($img);
                 $em->flush();
                 
-                $loader->addFilter(new \Zend\Filter\File\Rename(array('target'=>$img->getId())),null,'image');
-
+                $loader->addFilter(new \Zend\Filter\File\Rename(array(
+                     'target'=>$img->getId().'.'.substr($info['image']['type'], strpos($info['image']['type'], "/")+1)))
+                     ,null,
+                     'image'
+                     );
+                $loader->addValidator(new \Zend\Validator\File\FilesSize(array('min'=>100,'max'=>'2MB')));
+                $loader->addValidator(new \Zend\Validator\File\Extension(array('jpg','jpeg','png','gif')));
                 
-                
-                if($loader->receive(array('sticker_image'))){
+                if($loader->receive(array('image'))){
                     $data['image'] = $img;
+                    echo $stick_bean->create($data);
                 }else{
-                    $data['image'] = null;
+                    $form->get('image')->setMessages($loader->getMessages());
                 }
               
-             echo $stick_bean->create($data);
+             
             
             
         }
@@ -61,8 +69,22 @@ class Stick extends AbstractActionController
         return array('form'=>$form);
      
        
-                
+    }
+    
+    public function showAction(){
+        
+        $id = $this->getEvent()->getRouteMatch()->getParam('id');
+        $em = $this->getServiceLocator()->get('em');
+        $bean = new \Sticks\Beans\Stickers($em);
+        
+        
+       return array('stick'=>$bean->getIfExist($id));
+        
+       
+        
         
     }
+    
+    
     
 }

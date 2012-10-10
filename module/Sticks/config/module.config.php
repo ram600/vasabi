@@ -23,25 +23,34 @@ return array(
               ),
               
               'stick'=>array(
-                  'type'=>'Segment',
+                  'type'=>'Literal',
                    'options'=>array(
-                       'route'=>'/:controller[/:action]',
+                       'route'=>'/stick',
                        'constraints'=>array(
-                          'controller'=>'[a-zA-Z]+',
-                          'action'    =>'[a-zA-Z]+',
+                          'id'    =>'[0-9]+'
                        ),
                        'defaults'=>array(
                            //'__NAMESPACE__'=>'Sticks\Controller',
-                           'action'=>'index'
+                           'action'=>'add',
+                           'controller'=>'stick'
                        )
                      ),
                      'may_terminate'=>true,
-                     'child_routes'=>array(
-                        'query'=>array(
-                            'type'=>'Query',
-                         )
-                     )
-               
+                     'child_routes' => array(
+                            'show' => array(
+                                'type'    => 'Segment',
+                                'options' => array(
+                                    'route'    => '/:id',
+                                    'constraints' => array(
+                                       'id'=>'[0-9]+'
+                                    ),
+                                    'defaults' => array(
+                                        'controller'=>'stick',
+                                        'action'=>'show'
+                                    ),
+                                ),
+                            ),
+                        ),
                   
                ) 
 

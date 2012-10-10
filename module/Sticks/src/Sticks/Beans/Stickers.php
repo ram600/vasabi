@@ -106,7 +106,7 @@ class Stickers extends Bean {
         if($row = $this->_em->find($this->_stickClass, $id)){
             return $row;
         }
-        throw new Exceptions\StickerNotExist;
+        throw new Exceptions\StickerNotExist($id);
     }
 
     
@@ -119,7 +119,6 @@ class Stickers extends Bean {
             
             $inputFilter->add($factory->createInput(array(
                 'name'=>'title',
-                'required'=>true,
                 'filters'=>array(
                     array('name'=>'StripTags'),
                     array('name'=>'StringTrim')
@@ -135,6 +134,11 @@ class Stickers extends Bean {
                     )
                 )
             )));
+            
+            $inputFilter->add($factory->createInput(array(
+                'name'=>'image',
+                'required'=>true,
+             )));
             
             
             return $inputFilter;

@@ -19,7 +19,7 @@ class Stick {
 
 /**
  *
- * @OneToOne(targetEntity="\Sticks\Model\Image",inversedBy="id",orphanRemoval=true)
+ * @OneToOne(targetEntity="Sticks\Model\Image",orphanRemoval=true)
  * 
  */
  private $image;

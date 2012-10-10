@@ -3,7 +3,8 @@ namespace Sticks\Exceptions;
 class StickerNotExist extends Main{
     
     public function __construct($id) {
-        parent::__construct("Sticker with id => $id not exist!");
+        $id = (int)$id;
+        parent::__construct("Sticker with id => {$id} not exist!");
     }
 }
 ?>
