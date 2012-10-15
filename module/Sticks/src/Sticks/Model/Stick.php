@@ -3,11 +3,20 @@ namespace Sticks\Model;
 
 
 /** @Entity
- *   @Table(name="stickers")
+ *  @Table(name="stickers")
  *
  */
 class Stick {
 
+    
+ const STATUS_RESOLVED = 1;
+ const STATUS_DENIED   = 0;
+// 
+ private static $status_list = array(
+     self::STATUS_DENIED,
+     self::STATUS_RESOLVED
+ );
+    
  /** @Id
   *  @Column(type="integer")
   *  @GeneratedValue(strategy="AUTO")
@@ -33,11 +42,14 @@ class Stick {
  private $modify;
  
  /** @Column(type="integer", nullable=false) */
- private $rate = 0;
+private $rate = 0;
  
  /** @Column(type="integer",nullable=false) */
  private $userId;
 
+ 
+ /** @Column(type="integer",nullable=false) */
+ private $status = 1;
  
  public function __construct() {
      
@@ -96,7 +108,17 @@ class Stick {
      $this->userId = $userId;
  }
 
+    public function getStatus() {
+        return $this->status;
+    }
 
+    public function setStatus($status) {
+        if(in_array($status,self::$status_list)){
+          $this->status = $status;  
+        }else{
+            throw new \Exception('Status not exist for Stickers');
+        }
+    }
 
 
     

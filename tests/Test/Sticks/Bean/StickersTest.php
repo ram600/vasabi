@@ -44,6 +44,19 @@ class StickersTest extends Main{
        return $obj->getId();
     }
     
+    
+    /**
+     * @depends testCreateStick
+     */
+    function testListSticker($id){
+        $list = $this->object->getList('rate_last_day');
+        
+        $this->assertTrue(is_array($list));
+        $this->assertEquals(1, count($list));
+    }
+    
+    
+    
     /**
      * @depends testCreateStick
      */

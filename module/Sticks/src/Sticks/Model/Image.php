@@ -58,6 +58,10 @@ class Image{
     }
 
     public function getType() {
+        return substr($this->type, strpos($this->type, '/')+1);
+    }
+    
+    public function getMetaType(){
         return $this->type;
     }
 

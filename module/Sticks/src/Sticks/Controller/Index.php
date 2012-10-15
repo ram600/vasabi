@@ -18,9 +18,12 @@ class Index extends AbstractActionController
     public function indexAction()
     {  
         
+        $em = $this->getServiceLocator()->get('em');
         
-     echo 1;exit;
-      
-      
+        
+        
+        
+        
+        
     }
 }

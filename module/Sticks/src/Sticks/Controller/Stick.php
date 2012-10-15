@@ -11,6 +11,7 @@ namespace Sticks\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Sticks\Beans\Stickers;
 
 
 class Stick extends AbstractActionController
@@ -28,6 +29,7 @@ class Stick extends AbstractActionController
         $data['image'] = $file['name'];
         $form->setData($data);
         $form->setInputFilter(\Sticks\Beans\Stickers::getInputFilter());
+        
         
         if($form->isValid()){
            
@@ -80,9 +82,13 @@ class Stick extends AbstractActionController
         
        return array('stick'=>$bean->getIfExist($id));
         
+        
+    }
+    
+    public function listAction(){
        
-        
-        
+        $sb = new Stickers($this->getServiceLocator()->get('em'));
+        return array('list'=>$sb->getList('rate_last_day'));
     }
     
     

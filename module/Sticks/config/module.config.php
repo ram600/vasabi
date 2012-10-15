@@ -16,8 +16,8 @@ return array(
                   'options'=>array(
                       'route'=>'/',
                       'defaults'=>array(
-                          'controller'=>'index',
-                          'action'=>'index'
+                          'controller'=>'stick',
+                          'action'=>'list'
                       )
                   )
               ),
@@ -96,4 +96,9 @@ return array(
             __DIR__ . '/../view',
         ),
     ),
+    'view_helpers' => array(  
+            'invokables' => array(  
+                 'stick' => 'Sticks\Helper\Stick',   
+             ),  
+       ),
 );

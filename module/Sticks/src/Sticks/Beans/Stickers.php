@@ -12,7 +12,7 @@ use Zend\InputFilter\InputFilterAwareInterface;
 
 class Stickers extends Bean {
 
-    protected $_stickClass = 'Sticks\Model\Stick';
+    protected static $_stickClass = 'Sticks\Model\Stick';
     protected $_form;
     protected $max_count = 10;
     
@@ -78,7 +78,7 @@ class Stickers extends Bean {
         if($page <= 0){
             $page = 1;
         }
-        return $this->_em->getRepository($this->_stickClass)
+        return $this->_em->getRepository(self::$_stickClass)
         ->findBy(array('userId'=>$user_id),array('createDate'=>'ASC'), $this->max_count, $this->max_count*($page-1));
     }
     
@@ -103,7 +103,7 @@ class Stickers extends Bean {
      * @throws Exceptions\StickerNotExist
      */
     public function getIfExist($id){
-        if($row = $this->_em->find($this->_stickClass, $id)){
+        if($row = $this->_em->find(self::$_stickClass, $id)){
             return $row;
         }
         throw new Exceptions\StickerNotExist($id);
@@ -148,6 +148,40 @@ class Stickers extends Bean {
     public function setInputFilter(\Zend\InputFilter\InputFilterInterface $inputFilter) {
          throw new \Exception("Not used");
 
+    }
+    
+    /**
+     * $type ddefault - date DESC
+     *       rate      - rate desc
+     *       
+     */
+    public function getList($type = null){
+        $list = array();
+        switch ($type) {
+            case 'rate_last_day':
+                $list = $this->getBaseValidQuery('last_day')->orderBy('s.rate', 'DESC')->getQuery()->getResult();
+                break;
+
+            default:
+                $list = $this->getBaseValidQuery()->getQuery()->getResult();
+                break;
+        }
+        
+        return $list;
+    }
+    
+    protected function getBaseValidQuery($date = 'all'){
+        $q = $this->_em->createQueryBuilder();
+        $q->select('s')->from(self::$_stickClass,'s')->where('s.status = 1?');
+        switch ($date) {
+            case 'last_day':
+                $q->where('s.createDate >= CURRENT_DATE()');   
+                break;
+                default:
+                //all
+                break;
+        }
+        return $q;
     }
    
 

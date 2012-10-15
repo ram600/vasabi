@@ -69,6 +69,12 @@ class Image extends \Sticks\Model\Image implements \Doctrine\ORM\Proxy\Proxy
         return parent::getType();
     }
 
+    public function getMetaType()
+    {
+        $this->__load();
+        return parent::getMetaType();
+    }
+
     public function setType($type)
     {
         $this->__load();
