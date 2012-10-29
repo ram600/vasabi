@@ -23,6 +23,7 @@ class Sticker extends Form
             )
         ));
 
+
         
         $this->add(array(
             'name' => 'image',

@@ -1,16 +1,177 @@
-<?php
-// filename : module/Test/view/test/profile/add.phtml
+<script src="/js/jquery.validate.js"></script>
+<script src="/js/jquery.form.js"></script>
 
-$form->setAttribute('action',
-                    $this->url('stick', //your route name ...
-                               array('controller'=>'stick', 'action' => 'add'))); 
-$form->prepare();
+<script src="/js/noty/jquery.noty.js"></script>
+<script src="/js/noty/top.js"></script>
+<script src="/js/noty/topRight.js"></script>
+<script src="/js/noty/default.js"></script>
 
-echo $this->form()->openTag($form);
-echo $this->formRow($form->get('title'));
 
-echo $this->formRow($form->get('image'));
 
-echo $this->formSubmit($form->get('submit'));
-echo $this->form()->closeTag();
-?>
+<script>
+$.noty.defaults = {
+  layout: 'top',
+  theme: 'default',
+  type: 'alert',
+  text: '',
+  dismissQueue: true, // If you want to use queue feature set this true
+  template: '<div class="noty_message"><span class="noty_text"></span><div class="noty_close"></div></div>',
+  animation: {
+    open: {opacity: 'toggle'},
+    close: {opacity: 'toggle'},
+    easing: 'swing',
+    speed: 600 // opening & closing animation speed
+  },
+  timeout: 2000, // delay for closing event. Set false for sticky notifications
+  force: false, // adds notification to the beginning of queue when set to true
+  modal: false,
+  closeWith: ['hover'], // ['click', 'button', 'hover']
+  callback: {
+    onShow: function() {},
+    afterShow: function() {},
+    onClose: function() {},
+    afterClose: function() {}
+  },
+  buttons: false // an array of buttons
+};
+    
+    $(function(){
+        
+ 
+        
+       
+        $('form div#lbl-load').toggle(
+        function(){
+           
+            $(this).text('Load from laptop?');
+            $('#image-type-checker').attr('value',1);
+            $('#loader_button_event').hide();
+            $('#loader_button').hide();
+            $('input#image-from-url').show(); 
+            
+            
+        },function(){
+          
+            $(this).text('Load from url?');
+            $('#image-type-checker').attr('value',0);
+            $('input#image-from-url').hide();
+            $('#loader_button_event').show();
+            $('#loader_button').show();
+        });
+    
+    
+           $('#sticker-form').validate(
+                 {
+                     submitHandler:function(){
+                         
+                         $('#submit_stick').addClass('disabled');
+                         
+                         $('#sticker-form').ajaxSubmit(
+                            {
+                            target:"divToUpdate",
+                            dataType:'json',
+                            beforeSubmit:function(data,form,opt){
+                                return true;
+                            },
+                            success:function(data){
+                                obj = new globalResult(data);
+                                if(!obj.isSuccess()){
+                                    $('#submit_stick').removeClass('disabled');
+                                }
+                                
+                            }
+                          }
+                        );
+                        
+                     },
+                     focusInvalid: false,
+                     focusCleanup: true,
+                     rules:{
+                        title:{
+                            required:true,
+                            minlength:3,
+                            maxlength:140
+                        },
+                        "image-url":{
+                           url:true,
+                           required:true
+                        },
+                        image:{
+                            required:true
+                        }
+                     },
+                     messages:{
+                         title:{
+                             required:"Title required!",
+                             minlength:"Title must be > 2",
+                             maxlength: "Title must be < 140"
+                         }
+                     },
+                     
+                     
+                      errorPlacement:function(error,element){
+                        if($(element).attr('name') == 'image'){
+                            $('#loader_button_event').css('border-color','#B94A48');
+                        }
+                        $(element).parent().removeClass('success').addClass('error');
+                      },
+                      success:function(mess,element){
+                         if($(element).attr('name') == 'image'){
+                            $('#loader_button_event').css('border-color','#356635');
+                        }
+                         $(element).parent().removeClass('error').addClass('success');
+                      }
+
+                 }
+             );
+    
+    
+    
+        
+    
+    
+    });
+    
+    
+
+</script>  
+
+<form action="<?=$this->url('stick',array('controller'=>'stick','action'=>'add'))?>" method="post" name="sticker-form" enctype="multipart/form-data" id="sticker-form">
+    <input type="hidden" id="image-type-checker" name="from-url" value="0">
+    
+    <div class="control-group">
+        <div class="alert alert-info">
+            <h3>Title</h3>
+            Max 160 chars
+        </div>  
+        <input name="title" type="text" id="inputError" class="input-error" value="" />
+    </div>
+    
+    
+    <div class="control-group">
+        <div class="alert alert-info">
+            <h3>Load image</h3>
+            JPEG,PNG
+            <div id="lbl-load" style="color:#B94A48">Want load from URL?</div>
+        </div>  
+       
+        <script>
+         $(function(){
+            $('#loader_button').change(function() {
+                $('#loader_button_event').text('Selected image: '+$(this).val()).css('border-color','#356635');
+            });  
+         });
+    
+        </script>    
+       
+        <button id="loader_button_event" onclick="$('#loader_button').click();" class="btn" >Select image</button>
+        <input name="image" type="file"  style="width:0px" style="display:none" class="input-error at_least_one"  id="loader_button" />
+        <input type="text" id="image-from-url" name="image-url" class="input-error at_least_one" value="" placeholder="Valid URL" style="display:none">
+    </div>
+    
+    <br />   
+    
+    <button type="submit"  id="submit_stick"  class="btn btn-success btn-large"><h2>&nbsp;&nbsp;&nbsp; Stick&nbsp;&nbsp;&nbsp;</h2></button>
+  
+    
+</form>

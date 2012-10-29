@@ -42,6 +42,30 @@ class Image extends \Sticks\Model\Image implements \Doctrine\ORM\Proxy\Proxy
     }
 
     
+    public function getWidth()
+    {
+        $this->__load();
+        return parent::getWidth();
+    }
+
+    public function setWidth($width)
+    {
+        $this->__load();
+        return parent::setWidth($width);
+    }
+
+    public function getHeight()
+    {
+        $this->__load();
+        return parent::getHeight();
+    }
+
+    public function setHeight($height)
+    {
+        $this->__load();
+        return parent::setHeight($height);
+    }
+
     public function getId()
     {
         if ($this->__isInitialized__ === false) {
@@ -49,18 +73,6 @@ class Image extends \Sticks\Model\Image implements \Doctrine\ORM\Proxy\Proxy
         }
         $this->__load();
         return parent::getId();
-    }
-
-    public function getName()
-    {
-        $this->__load();
-        return parent::getName();
-    }
-
-    public function setName($name)
-    {
-        $this->__load();
-        return parent::setName($name);
     }
 
     public function getType()
@@ -108,7 +120,7 @@ class Image extends \Sticks\Model\Image implements \Doctrine\ORM\Proxy\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'name', 'type', 'size', 'createDate');
+        return array('__isInitialized__', 'id', 'type', 'size', 'width', 'height', 'createDate');
     }
 
     public function __clone()

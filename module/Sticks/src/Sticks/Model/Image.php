@@ -15,12 +15,7 @@ class Image{
      */
     private $id;
     
-    /**
-     *
-     * @Column(type="string", length=100)
-     */
-    private $name;
-    
+
     /**
      * @Column(type="string", length=10)
      */
@@ -31,6 +26,32 @@ class Image{
      * @Column(type="integer")
      */
     private $size;
+    
+    
+    /**
+     * @Column(type="integer")
+     */
+    private $width;
+    public function getWidth() {
+        return $this->width;
+    }
+
+    public function setWidth($width) {
+        $this->width = $width;
+    }
+
+    public function getHeight() {
+        return $this->height;
+    }
+
+    public function setHeight($height) {
+        $this->height = $height;
+    }
+
+        /**
+     * @Column(type="integer")
+     */
+    private $height;
     
     /**
      *
@@ -49,16 +70,8 @@ class Image{
 
    
 
-    public function getName() {
-        return $this->name;
-    }
-
-    public function setName($name) {
-        $this->name = $name;
-    }
-
     public function getType() {
-        return substr($this->type, strpos($this->type, '/')+1);
+       return $this->type;
     }
     
     public function getMetaType(){
@@ -67,6 +80,23 @@ class Image{
 
     public function setType($type) {
         $this->type = $type;
+    }
+    public static function getTypeFromImagesizeConst($num){
+
+        switch ($num) {
+            case 1:
+                return 'gif';
+                break;
+            case 2:
+                return  'jpg';
+                break;
+            case 3:
+                return 'png';
+                break;
+            default:
+                return 'not_valid_image';
+                break;
+        }
     }
 
     public function getSize() {

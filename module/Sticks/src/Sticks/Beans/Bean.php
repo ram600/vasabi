@@ -23,7 +23,7 @@ abstract class Bean {
   
 
     public function getDate(){
-        return date("Y-m-d H:i:s");
+        return date("Y-m-d");
        
     }
     

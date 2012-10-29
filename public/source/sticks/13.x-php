@@ -1,0 +1,31 @@
+<?
+  @$check_url_array = explode('/', $_REQUEST['REQUEST_URI'] );
+  if( @count($check_url_array)>2 && (@$check_url_array[0]=='actions' || @$check_url_array[0]=='tovari' || @$check_url_array[0]=='companies'))
+    {
+          /// РїСЂРѕРІРµСЂРєР° РЅР° URL РєР°С‚Р°Р»РѕРіР°
+	  $mlink = mysql_connect('188.138.48.205','r2','domodomo1');
+	  if(!$mlink) die('Not connected');
+	  $mdbsel = mysql_select_db('r2_new5',$mlink);
+	  if(!$mdbsel) die('Database not selected');
+
+	  $check_level1 = @$check_url_array[1];
+	  if($check_level1)
+	  {
+	  /// РїСЂРѕРІРµСЂРєР° РЅР° Р»РѕР¶РЅС‹Р№ 1-С‹Р№ СѓСЂРѕРІРµРЅСЊ
+	  $check_query = mysql_query("SELECT ig.node_level AS this_level, ip.node_level AS parent_level, ip.system_name AS parent_url FROM itemgroups AS ig, itemgroup_links AS il, itemgroups AS ip WHERE il.child_node=ig.id AND ig.system_name='{$check_level1}' AND ip.id=il.parent_node;",$mlink);
+	  while($check_row = mysql_fetch_assoc($check_query))
+	   {
+	   if($check_row['this_level']==2) { continue; }
+	   elseif($check_row['this_level']==3)
+	    {
+	    /// 301!!!
+	    array_splice($check_url_array,1,0,$check_row['parent_url']);
+	    Header('HTTP/1.1 301 Moved Permanently');
+	    Header('Location: http://www.rasprodaga.ru/'.implode('/',$check_url_array));
+	    exit;
+	    }
+	   }
+	  }
+
+    }
+?>

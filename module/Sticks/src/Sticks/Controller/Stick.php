@@ -12,65 +12,93 @@ namespace Sticks\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Sticks\Beans\Stickers;
-
+use Sticks\Beans\ImageLoader;
 
 class Stick extends AbstractActionController
 {
   
 
+    public function likeAction(){
+        $this->ajaxVote(true);
+    }
     
-    
-    
-    public function addAction(){
-       
-        $form = new \Sticks\Form\Sticker();
-        $data = $this->request->getPost();
-        $file = $this->getRequest()->getFiles('image');
-        $data['image'] = $file['name'];
-        $form->setData($data);
-        $form->setInputFilter(\Sticks\Beans\Stickers::getInputFilter());
-        
-        
-        if($form->isValid()){
-           
-                $em =    $this->getServiceLocator()->get('em');
-                $stick_bean = new \Sticks\Beans\Stickers($em);
-                $data = $form->getData();
-               
-                
-                $loader = new \Zend\File\Transfer\Adapter\Http();
-             
-                $loader->setDestination(APPLICATION_PATH.'/public/source/sticks/');
-                
-                $info = $loader->getFileInfo('image');
-                
-                $img  =  \Custom\Bind\Binder::bind($info['image'], new \Sticks\Model\Image());
-                $em->persist($img);
-                $em->flush();
-                
-                $loader->addFilter(new \Zend\Filter\File\Rename(array(
-                     'target'=>$img->getId().'.'.substr($info['image']['type'], strpos($info['image']['type'], "/")+1)))
-                     ,null,
-                     'image'
-                     );
-                $loader->addValidator(new \Zend\Validator\File\FilesSize(array('min'=>100,'max'=>'2MB')));
-                $loader->addValidator(new \Zend\Validator\File\Extension(array('jpg','jpeg','png','gif')));
-                
-                if($loader->receive(array('image'))){
-                    $data['image'] = $img;
-                    echo $stick_bean->create($data);
+    public function unlikeAction(){
+        $this->ajaxVote(false);
+    }
+    protected function ajaxVote($like = true){
+         if($this->request->isPost()){
+            
+            if($id = (int)$this->request->getPost('id')){
+                if($like){
+                    $method_name = 'like';
                 }else{
-                    $form->get('image')->setMessages($loader->getMessages());
+                    $method_name = 'unlike';
                 }
-              
-             
+                $bean = new Stickers($this->getServiceLocator()->get('em'));
+                return  \Custom\Ajax\Json::response($bean->$method_name($id),'Ок');
+               
+           }else{
+              throw new \Exception('Not valid request!');  
+            }
             
             
         }
-        
-        return array('form'=>$form);
-     
+        throw new \Exception('Not valid request!');
+    }
+    
+    public function addAction(){
        
+      if($this->request->isPost()){
+        $data = $this->request->getPost();
+        
+        
+        //load from url
+        if($from_url = $this->request->getPost('from-url')){
+           $data['image'] = $this->request->getPost('image-url'); 
+        }else{
+           $file = $this->getRequest()->getFiles('image');
+           $data['image'] = 'image';
+        }
+        
+        $validate = \Sticks\Beans\Stickers::getInputFilter();
+        $validate->setData($data);
+        $errors = array();
+        
+        if($validate->isValid()){
+                $data = $validate->getValues();
+                
+                $img_path = APPLICATION_PATH.'/public/source/sticks/';
+                $em =    $this->getServiceLocator()->get('em');
+                
+                $stick_bean = new Stickers($em);
+                $imagebean =  new ImageLoader($em,$img_path);
+                
+                if($from_url == 1){
+                    $imagebean->loadFromUrl($data['image']);
+                    
+                }else{
+                   $imagebean->loadFromForm($data['image']);
+                }
+                
+                if(!count($imagebean->getErrors())){
+                    $data['image'] = $imagebean->getLastSaveImage();
+                    $stick_bean->create($data); 
+                }else{
+                    $errors[] = $imagebean->getErrors();
+                }
+                
+        }
+       
+        
+        \Custom\Ajax\Json::response(1,'Sticked!',$validate->getMessages()+$errors);
+       
+       }
+       
+    }
+    
+    
+    protected function loadImageFromForm($upload_name){
+        
     }
     
     public function showAction(){
@@ -87,8 +115,18 @@ class Stick extends AbstractActionController
     
     public function listAction(){
        
-        $sb = new Stickers($this->getServiceLocator()->get('em'));
-        return array('list'=>$sb->getList('rate_last_day'));
+         $sb = new Stickers($this->getServiceLocator()->get('em'));
+         $type = $this->getEvent()->getRouteMatch()->getParam('type', 'hot');
+        //ajax
+        if($this->request->isPost()){
+            
+            \Custom\Ajax\Json::response($sb->getList($type,true,array('s.id','s.title','i.type','i.id as image_id','s.rate')), 'ok');
+        }
+        
+        
+        return array('list'=>$sb->getList($type));
+        
+        
     }
     
     

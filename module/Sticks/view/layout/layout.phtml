@@ -15,6 +15,7 @@
 
     <!-- Scripts -->
     <?php echo $this->headScript()->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+                                  ->prependFile($this->basePath() . '/js/core.js')
                                   ->prependFile($this->basePath() . '/js/jquery-1.7.2.min.js') ?>
 
   </head>
@@ -36,7 +37,9 @@
           <div class="nav-collapse">
             <ul class="nav">
                 
-              <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
+              <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Hot') ?></a></li>
+              <li class="active"><a href="<?php echo $this->url('best') ?>"><?php echo $this->translate('Best') ?></a></li>
+              <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('New') ?></a></li>
               <li class="active"><a href="<?php echo $this->url('stick') ?>"><?php echo $this->translate('Stick add') ?></a></li>
             </ul>
           </div><!--/.nav-collapse -->

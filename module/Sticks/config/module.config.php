@@ -17,18 +17,39 @@ return array(
                       'route'=>'/',
                       'defaults'=>array(
                           'controller'=>'stick',
-                          'action'=>'list'
+                          'action'=>'list',
+                          'type'=>'hot'
                       )
                   )
               ),
-              
+              'best'=>array(
+                  'type'=>'Literal',
+                  'options'=>array(
+                      'route'=>'/best',
+                      'defaults'=>array(
+                          'controller'=>'stick',
+                          'action'=>'list',
+                          'type'=>'best'
+                      ),
+                    
+                  )
+              ),
+              'new'=>array(
+                  'type'=>'Literal',
+                  'options'=>array(
+                      'route'=>'/new',
+                      'defaults'=>array(
+                          'controller'=>'stick',
+                          'action'=>'list',
+                          'type'=>'new'
+                      ),
+                      
+                  )
+              ),
               'stick'=>array(
                   'type'=>'Literal',
                    'options'=>array(
                        'route'=>'/stick',
-                       'constraints'=>array(
-                          'id'    =>'[0-9]+'
-                       ),
                        'defaults'=>array(
                            //'__NAMESPACE__'=>'Sticks\Controller',
                            'action'=>'add',
@@ -50,6 +71,18 @@ return array(
                                     ),
                                 ),
                             ),
+                           'def' =>array(
+                               'type'=>'Segment',
+                               'options'=>array(
+                                   'route'=>'/:action',
+                                   'constraints'=>array(
+                                       'action'=>'[a-zA-Z]+'
+                                   ),
+                                   'default'=>array(
+                                       'controller'=>'stick'
+                                   )
+                               )
+                           )
                         ),
                   
                ) 

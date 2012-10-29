@@ -30,11 +30,12 @@ class Stick extends AbstractHelper  {
     public function printStick(\Sticks\Model\Stick $stick){
         ob_start();
         ?>
-            <div>
-                <div>Rate:<?=$stick->getRate()?> Title:<?=htmlspecialchars($stick->getTitle())?></div>
+            <div class="stick" id="<?=$stick->getId()?>">
+                <div>Rate:<b id="rate-counter-<?=$stick->getId()?>"><?=$stick->getRate()?></b>(<a href="#"  onclick="vote(<?=$stick->getId()?>,'rate-counter-','like');return false;">+</a><a href="#" id="unlike-counter" onclick="vote(<?=$stick->getId()?>,'rate-counter-','unlike');return false;">-</a>) Title:<?=htmlspecialchars($stick->getTitle())?></div>
                 <div>
-                    <?php $image = $stick->getImage(); ?>
-                    <img src="/source/sticks/<?=$image->getId().".".$image->getType();?>" style="max-width: 700px">
+                    <?php if($image = $stick->getImage()):?>
+                     <img src="/source/sticks/<?=$image->getId().".".$image->getType();?>" style="max-width: 700px">
+                    <?php endif; ?>
                 </div>    
                 
             </div>    

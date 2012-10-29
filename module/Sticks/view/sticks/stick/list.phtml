@@ -1,16 +1,50 @@
-<div>
-    
+<div id="0"></div>
+<script>
+    $(document).ready(
+    function() {
+        
+        function lastPostFunc() 
+        { 
+            $('div#lastPostsLoader').html('<img src="bigLoader.gif">');
+            $.post("/",{id:$('div#main-container > div#stick:last').attr('id')},     
+            function(result){
+                $.each(result.data, function(i,d){
+                    if(d.type != null){
+                    $('#main-container').append(
+                        '<div class="stick" id="'+d.id+'">'+
+                        '<div>Rate:<b id="rate-counter-'+d.id+'">'+d.rate+'</b>(<a href="#" onclick="vote('+d.id+',\'rate-counter-\',\'like\');return false;">+</a><a href="#" id="unlike-counter" onclick="vote('+d.id+',\'rate-counter-\',\'unlike\');return false;">-</a>) Title:'+d.title+'</div>'+
+                        '<div><img src="/source/sticks/'+d.image_id+'.'+d.type+'" style="max-width: 700px"> </div></div>'
+                    );
+                        }
+                })
+            },"json");
+        }; 
+        
+       $(window).scroll(function(){
+        if  (($(document).height() - ($(window).height()+$(window).scrollTop())) < ($(window).height()/4)){
+                lastPostFunc();
+            }
+        });
+        
+       
+  
+        
+    }
+);
+</script>    
+
+
+
+<div id="main-container">
+
 <?php foreach($list as $row): 
     
     echo $this->stick()->printStick($row);
     
     ?>
-        
-    
- 
+      
 <?php endforeach;
 //print_r($list);
 ?>
     
 </div>
-    

@@ -28,14 +28,14 @@ class Stick {
 
 /**
  *
- * @OneToOne(targetEntity="Sticks\Model\Image",orphanRemoval=true)
+ * @OneToOne(targetEntity="Sticks\Model\Image",orphanRemoval=true,fetch="LAZY")
  * 
  */
  private $image;
 
  
  
- /** @Column(type="datetime",nullable=false)*/
+ /** @Column(type="date",nullable=false)*/
  private $createDate;
 
  /** @Column(type="datetime",nullable=true)*/
@@ -74,7 +74,7 @@ private $rate = 0;
      $this->title = $title;
  }
 
-
+ 
 
  public function getCreateDate() {
      return $this->createDate;

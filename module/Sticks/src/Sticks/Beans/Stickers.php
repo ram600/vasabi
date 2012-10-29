@@ -16,6 +16,9 @@ class Stickers extends Bean {
     protected $_form;
     protected $max_count = 10;
     
+    protected $offset = 0;
+    protected $count = 10;
+    
     static protected $_inputFilter;
     
     
@@ -121,7 +124,8 @@ class Stickers extends Bean {
                 'name'=>'title',
                 'filters'=>array(
                     array('name'=>'StripTags'),
-                    array('name'=>'StringTrim')
+                    array('name'=>'StringTrim'),
+                    array('name'=>'HtmlEntities')
                 ),
                 'validators'=>array(
                     array(
@@ -140,6 +144,16 @@ class Stickers extends Bean {
                 'required'=>true,
              )));
             
+            $inputFilter->add($factory->createInput(array(
+                'required'=>false,
+                'name'=>'image-url',
+                'validators'=>array(
+                    array(
+                        'name'=>'Uri'
+                    )
+                )
+             )));
+            
             
             return $inputFilter;
         //}
@@ -150,39 +164,70 @@ class Stickers extends Bean {
 
     }
     
+    
+    
+    public function setCount($int){
+        if($int < $this->max_count ){
+           $this->count = (int)$int; 
+        }else{
+            $this->count = $this->max_count;
+        }
+    }
+    
+    public function setOffset($int){
+        $this->offset = (int)$int;
+    }
+    
+    
+    
     /**
      * $type ddefault - date DESC
      *       rate      - rate desc
      *       
      */
-    public function getList($type = null){
+    public function getList($type = null,$ajax = false,$fields = array('s','i')){
         $list = array();
         switch ($type) {
-            case 'rate_last_day':
-                $list = $this->getBaseValidQuery('last_day')->orderBy('s.rate', 'DESC')->getQuery()->getResult();
+            case 'hot':
+                $list = $this->getBaseValidQuery($fields)->addOrderBy('s.createDate','DESC')->addOrderBy('s.rate', 'DESC')->getQuery();
                 break;
-
+            case 'best':
+                $list = $this->getBaseValidQuery($fields)->orderBy('s.rate', 'DESC')->getQuery();
+                break;
+            case 'new':
+                $list = $this->getBaseValidQuery($fields)->orderBy('s.createDate','DESC')->getQuery();
+                break;
             default:
-                $list = $this->getBaseValidQuery()->getQuery()->getResult();
+                $list = $this->getBaseValidQuery($fields)->getQuery();
                 break;
+        }
+        //echo $list->getSQL();exit;
+        if($ajax){
+          return $list->getArrayResult();  
         }
         
-        return $list;
+        return $list->getResult();
     }
     
-    protected function getBaseValidQuery($date = 'all'){
+    
+    
+    
+    /**
+     * 
+     * 
+     * @param type $fields
+     * @return type
+     */
+    protected function getBaseValidQuery($fields = array('s','i')){
         $q = $this->_em->createQueryBuilder();
-        $q->select('s')->from(self::$_stickClass,'s')->where('s.status = 1?');
-        switch ($date) {
-            case 'last_day':
-                $q->where('s.createDate >= CURRENT_DATE()');   
-                break;
-                default:
-                //all
-                break;
-        }
+        $q->select(implode(',',$fields))->from(self::$_stickClass,'s')
+          ->leftjoin('s.image', 'i')    
+          ->where('s.status = 1');
+        $q->setFirstResult($this->offset);
+        $q->setMaxResults($this->count);
         return $q;
     }
+   
    
 
     

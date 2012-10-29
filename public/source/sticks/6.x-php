@@ -1,0 +1,23 @@
+<?php
+function factorial($digit){
+	if(!is_integer($digit) OR $digit < 0){
+		die("Must be positive digit!");
+	}
+	if($digit == 0){
+		return 1;
+	}
+        
+      
+        $return = $digit;
+        
+	return $return*factorial(--$digit);
+}
+
+
+preg_match('/_(\d{1,})$/i',urldecode("%5f25252%00"), $matches);
+print_r($matches);
+
+$start = microtime(true);
+echo factorial(40000000000000000000000000000000000000000)."\n";
+
+echo "Time - ".microtime(true)-$start."\n";

@@ -35,3 +35,20 @@ div.container a.brand {
     margin-left: 0;
     padding: 8px 20px 12px 40px;
 }
+
+.stick{
+    margin: 5px;
+    padding: 15px;
+    width: 200px;
+}
+.classic {
+border: 1px solid #A7CD10;
+background-color: #E1FAB8;
+border-radius: 15px;
+-moz-border-radius: 15px;
+-webkit-border-radius: 15px;
+}
+.classic.error {
+border: 1px solid #E2365C;
+background-color: #F7C8D2;
+}
