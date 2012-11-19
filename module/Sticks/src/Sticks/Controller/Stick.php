@@ -17,7 +17,6 @@ use Sticks\Beans\ImageLoader;
 class Stick extends AbstractActionController
 {
   
-
     public function likeAction(){
         $this->ajaxVote(true);
     }
@@ -50,7 +49,6 @@ class Stick extends AbstractActionController
        
       if($this->request->isPost()){
         $data = $this->request->getPost();
-        
         
         //load from url
         if($from_url = $this->request->getPost('from-url')){

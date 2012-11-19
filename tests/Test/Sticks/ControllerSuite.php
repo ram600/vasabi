@@ -9,9 +9,11 @@ class ControllerSuite {
     }
     public static function suite()
     {
+        
         $suite = new \PHPUnit_Framework_TestSuite();
         $suite->addTestSuite('Test\Sticks\Bean\StickersTest');
         $suite->addTestSuite('Test\Sticks\Bean\ImageLoaderTest');
+         $suite->addTestSuite('Test\Sticks\Bean\UserTest');
         return $suite;
     }
     

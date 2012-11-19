@@ -1,6 +1,6 @@
 <?php
 namespace Sticks\Exceptions;
-class StickerNotExist extends Main{
+class EntityNotFound extends Main{
     
     public function __construct($id) {
         $id = (int)$id;

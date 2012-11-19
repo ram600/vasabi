@@ -1,0 +1,104 @@
+
+
+<script>
+	//document.getElementById("capt1").addEventListener("click", function() { alert(1) }, false);
+	//document.getElementById("capt2").addEventListener("click", function() { alert(2) }, false);
+	//document.getElementById("capt3").addEventListener("click", function() { alert(3) }, false);
+	//document.getElementById("capt1").addEventListener("click", function() { alert(1) }, false);
+	//document.getElementById("capt2").addEventListener("click", function() { alert(2) }, false);
+	//document.getElementById("capt3").addEventListener("click", function() { alert(3) }, false);
+        
+//        var id1 = setTimeout(function(){alert("timer");},1000);
+//        var id2 = setInterval(function(){alert("interval");},1000);
+//        
+//        
+
+
+//crossbrowser ajax
+
+function getXHR(){
+    var XmlHttpRequest;
+    try{
+     XmlHttpRequest = new ActiveXObject("Msxml2.XMLHTTP");   
+    }catch(e){
+     try{
+         XmlHttpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+     }catch(E){
+         XmlHttpRequest = false;
+     } 
+    }
+    if(!XmlHttpRequest || typeof XmlHttprequest !='undefined'){
+        XmlHttpRequest = new XMLHttpRequest();
+    }
+    return XmlHttpRequest;
+}
+
+//simple sample use  synchron!!!!
+var xhr = getXHR();
+xhr.open('GET','/js/js.html',false);
+xhr.send(null);
+if(xhr.status == 200){
+    //alert(xhr.responseText);
+}
+//А это синхронный запрос
+var xhr = getXHR();
+xhr.open('POST','/js/js.html',true);
+xhr.onreadystatechange = function(){
+    if(xhr.readyState == 4){
+        if(xhr.status == 200){
+            alert(xhr.responseText);
+        }
+    }
+}
+xhr.send("a=1&b=2");
+
+/*
+Вообще, список состояний readyState такой:
+
+0 - Unitialized
+1 - Loading
+2 - Loaded
+3 - Interactive
+4 - Complete
+Состояния 0-2 вообще не используются. */
+//######################################
+
+
+//перебор объекта
+   x = getXHR();
+   for(a in x){
+       // alert(x[a]);
+    }
+    
+    
+ //локальная переменная var x, глобальная y =1; попадает в window  ..в итоге alert window.y  => 1
+ //VAR ЛОКАЛЬНАЯ!! без var глобальная!!
+ function locglob(){
+     var x = 1;
+     y = 100;
+     
+     alert(x+"--"+window.y);
+ }
+ locglob();
+ alert(window.y);
+ //############################
+ 
+ //наследование
+ function Base(){}
+ Base.prototype.f1 = function(){alert(1)}
+ 
+ //наследник
+ function Derive(){}
+ Derive.prototype = new Base(); //only with new!!!!
+ 
+ var obj = new Derive();
+ obj.f1();
+ //############################
+ 
+ 
+            
+    
+    
+    
+    
+</script>

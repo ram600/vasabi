@@ -14,9 +14,11 @@ class ImageLoader extends Bean {
      */
     protected $last_image;
     
-    public function __construct(\Doctrine\ORM\EntityManager $em,$destination) {
+    public function __construct(\Doctrine\ORM\EntityManager $em,$destination = null) {
         parent::__construct($em);
+        if($destination){
         $this->setDestination($destination);
+        }
     }
     public function setDestination($dest){
         if(is_dir($dest) && is_writable($dest)){

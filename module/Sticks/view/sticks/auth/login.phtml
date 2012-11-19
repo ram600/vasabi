@@ -1,0 +1,117 @@
+<script src="/js/jquery.validate.js"></script>
+<script src="/js/jquery.form.js"></script>
+
+<script src="/js/noty/jquery.noty.js"></script>
+<script src="/js/noty/top.js"></script>
+<script src="/js/noty/topRight.js"></script>
+<script src="/js/noty/default.js"></script>
+
+
+
+<script>
+
+$(function(){
+        $('#login-form').validate(
+                 {
+                     focusInvalid: false,
+                     focusCleanup: true,
+                     rules:{
+                        email:{
+                            required:true,
+                            email:true
+                        },
+                       password:{
+                            required:true
+                        }
+                     },
+                     messages:{
+                         email:{
+                             required:"Email required!",
+                             email:"Not valid Email!"
+                         },
+                         password:{
+                             required:"Enter password!"
+                         }
+                     },
+                     
+                     
+                      errorPlacement:function(error,element){
+                        $(element).parents('.control-group').removeClass('success').addClass('error');
+                      },
+                      success:function(mess,element){
+                        $(element).parents('.control-group').removeClass('error').addClass('success');
+                      }
+
+                 }
+             );
+    
+    
+           
+    
+    
+    });
+
+
+
+
+</script>
+
+  <?php if(count($errors)): ?>
+            <div class="alert alert-error">
+                <?=implode('</br>',$errors)?>
+            </div>   
+    <?php endif; ?>
+
+
+
+<div style="margin:0px auto;display:table;">
+    <div class="tabbable"> <!-- Only required for left/right tabs -->
+      <ul class="nav nav-tabs">
+          <li class="active"><a href="#tab1" data-toggle="tab"><h3>Login</h3></a></li>
+         <li><a href="/signup" data-toggle="tab"><h3>Sign up</h3></a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="tab1">
+          <form s class="form-horizontal" id="login-form" method="POST" action="<?=$this->url('login')?>">
+    
+    <fieldset>
+  
+    <div class="control-group">
+
+          <!-- Text input-->
+          <label class="control-label" for="input01">Email:</label>
+          <div class="controls">
+            <input type="text" placeholder="email@mail.com"  name="email" class="input-xlarge">
+            <p class="help-block"></p>
+          </div>
+        </div>
+
+    <div class="control-group">
+
+          <!-- Text input-->
+          <label class="control-label" for="input01">Password</label>
+          <div class="controls">
+            <input type="password" name="password" placeholder="enter password" class="input-xlarge">
+            <p class="help-block"></p>
+          </div>
+        </div>
+
+    <div class="control-group">
+          <label class="control-label"></label>
+
+          <!-- Button -->
+          <div class="controls">
+            <button type="submit" class="btn btn-info">Login</button>
+          </div>
+        </div>
+
+    </fieldset>
+  </form>
+        </div>
+          
+        <div class="tab-pane" id="tab2">
+         
+        </div>
+      </div>
+    </div>
+</div>    

@@ -85,7 +85,47 @@ return array(
                            )
                         ),
                   
-               ) 
+               ),
+             'login'=>array(
+                 'type'=>'Literal',
+                 'options'=>array(
+                     'route'=>'/login',
+                     'defaults'=>array(
+                         'controller'=>'auth',
+                         'action'=>'login'
+                     )
+                 )
+             ),
+            'signup'=>array(
+                 'type'=>'Literal',
+                 'options'=>array(
+                     'route'=>'/signup',
+                     'defaults'=>array(
+                         'controller'=>'auth',
+                         'action'=>'signup'
+                     )
+                 )
+             ),
+            'confirm'=>array(
+                'type'=>'Literal',
+                 'options'=>array(
+                     'route'=>'/confirm',
+                     'defaults'=>array(
+                         'controller'=>'auth',
+                         'action'=>'confirm'
+                     )
+                 ) 
+            ),
+             'logout'=>array(
+                 'type'=>'Literal',
+                 'options'=>array(
+                     'route'=>'/logout',
+                     'defaults'=>array(
+                         'controller'=>'auth',
+                         'action'=>'logout'
+                     )
+                 )
+             ),
 
         ),
     ),
@@ -110,9 +150,16 @@ return array(
         'invokables' => array(
             'index' => 'Sticks\Controller\Index',
             'stick' =>'Sticks\Controller\Stick',
+            'auth' =>'Sticks\Controller\Auth',
             
         ),
+        
     ),
+    'controller_plugins' => array(
+        'invokables' => array(
+           'auth' => '\Sticks\Plugin\AuthPlugin',
+         )
+     ),
     'view_manager' => array(
         'display_not_found_reason' => true,
         'display_exceptions'       => true,
@@ -131,7 +178,9 @@ return array(
     ),
     'view_helpers' => array(  
             'invokables' => array(  
-                 'stick' => 'Sticks\Helper\Stick',   
+                 'stick' => 'Sticks\Helper\Stick',
+                 'user' => 'Sticks\Helper\User', 
              ),  
        ),
+    
 );

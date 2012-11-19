@@ -46,11 +46,7 @@ class Stickers extends Bean {
 
     
     public function loadImage($img_form_name){
-        
-       
-        
-           echo $loader->getMessages();exit;
-        
+        echo $loader->getMessages();exit;
     }
     
     
@@ -99,18 +95,7 @@ class Stickers extends Bean {
         return $row->getRate();
     }
     
-    /**
-     * 
-     * @param type $id
-     * @return \Sticks\Model\Stick
-     * @throws Exceptions\StickerNotExist
-     */
-    public function getIfExist($id){
-        if($row = $this->_em->find(self::$_stickClass, $id)){
-            return $row;
-        }
-        throw new Exceptions\StickerNotExist($id);
-    }
+  
 
     
     

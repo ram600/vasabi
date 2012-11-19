@@ -1,0 +1,170 @@
+<script src="/js/jquery.validate.js"></script>
+<script src="/js/jquery.form.js"></script>
+
+<script src="/js/noty/jquery.noty.js"></script>
+<script src="/js/noty/top.js"></script>
+<script src="/js/noty/topRight.js"></script>
+<script src="/js/noty/default.js"></script>
+
+
+
+<script>
+
+$(function(){
+        $('#login-form').validate(
+                 {
+                     focusInvalid: false,
+                     focusCleanup: true,
+                     rules:{
+                        email:{
+                            required:true,
+                            email:true
+                        },
+                       password:{
+                            required:true
+                        }
+                     },
+                     messages:{
+                         email:{
+                             required:"Email required!",
+                             email:"Not valid Email!"
+                         },
+                         password:{
+                             required:"Enter password!"
+                         }
+                     },
+                     
+                     
+                      errorPlacement:function(error,element){
+                        $(element).parents('.control-group').removeClass('success').addClass('error');
+                      },
+                      success:function(mess,element){
+                        $(element).parents('.control-group').removeClass('error').addClass('success');
+                      }
+
+                 }
+             );
+    
+    
+           
+        
+    
+    
+    });
+
+
+
+
+</script>
+<script type="text/javascript">
+ var RecaptchaOptions = {
+    theme : 'clean'
+ };
+ </script>
+ 
+  <?php if(count($errors)): ?>
+            <div class="alert alert-error">
+                <?php foreach($errors as $k=>$v):?>
+                         <?php if(is_array($v)):?>
+                            <?=$k?>-<?=implode('<br/>',$v)?>
+                            <br/>
+                         <?php else:?>
+                            <?=$v?><br/>
+                         <?php endif; ?>   
+                <?php endforeach; ?>
+            </div>   
+    <?php endif; ?>
+ 
+ <?php if(count($success)): ?>
+            <div class="alert success">
+                <?=implode('</br>',$success)?>
+            </div>   
+    <?php endif; ?>
+
+
+<div style="margin:0px auto;display:table;">
+    <div class="tabbable"> <!-- Only required for left/right tabs -->
+      <ul class="nav nav-tabs">
+          <li ><a href="/login" data-toggle="tab"><h3>Login</h3></a></li>
+        <li class="active" ><a href="#tab2" data-toggle="tab"><h3>Sign up</h3></a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane" id="tab1">
+        </div>
+          
+        <div class="tab-pane active" id="tab2">
+               <form s class="form-horizontal" id="register-form" method="POST" action="<?=$this->url('signup')?>">
+              
+                  <fieldset>
+                 
+                  <div class="control-group">
+
+                        <!-- Text input-->
+                        <label class="control-label" for="input01">Username:</label>
+                        <div class="controls">
+                            <input type="text" placeholder="Username"  name="username" value="<?=(isset($data['username']))?$data['username']:''?>" class="input-xlarge">
+                          <p class="help-block"></p>
+                        </div>
+                  </div>    
+
+                  <div class="control-group">
+
+                        <!-- Text input-->
+                        <label class="control-label" for="input01">Email:</label>
+                        <div class="controls">
+                            <input type="text" placeholder="email@mail.com"  name="email" value="<?=(isset($data['email']))?$data['email']:''?>" class="input-xlarge">
+                          <p class="help-block"></p>
+                        </div>
+                      </div>
+
+                  <div class="control-group">
+
+                        <!-- Text input-->
+                        <label class="control-label" for="input01">Password:</label>
+                        <div class="controls">
+                          <input type="password" name="password" placeholder="enter password" class="input-xlarge">
+                          <p class="help-block"></p>
+                        </div>
+                  </div>
+                      
+                  <div class="control-group">
+
+                        <!-- Text input-->
+                        <label class="control-label" for="input01">Repeat password:</label>
+                        <div class="controls">
+                          <input type="password" name="repassword" placeholder="repeat password" class="input-xlarge">
+                          <p class="help-block"></p>
+                        </div>
+                  </div>     
+                      
+                  <div class="control-group">
+
+                        <!-- Text input-->
+                        <label class="control-label" for="input01">Captcha:</label>
+                        <div class="controls">
+                             <?php
+                                require_once(APPLICATION_PATH.DIRECTORY_SEPARATOR.'public/recaptchalib.php');
+                                $publickey = "6Lehd9gSAAAAADGTj73BkRZbMaxCLYyNnrQvCZMh"; // you got this from the signup page
+                                echo recaptcha_get_html($publickey);
+                              ?>
+                          <p class="help-block"></p>
+                        </div>
+                  </div>    
+
+                  <div class="control-group">
+                        <label class="control-label"></label>
+
+                        <!-- Button -->
+                        <div class="controls">
+                          <button type="submit" class="btn btn-info">Register</button>
+                        </div>
+                  </div>
+                      
+                      
+
+                  </fieldset>
+                </form>
+        </div>
+      </div>
+    </div>
+</div>    
